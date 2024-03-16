@@ -2,8 +2,8 @@
  * Recebe um timestamp e retorna uma string no formato DD/MM.
  */
 export const formatDate = (timestamp: number): `${string}/${string}` => {
-  const date = new Date(timestamp);
-  return `${date.getUTCDate()}/${date.toISOString().slice(5, 7)}`;
+  const date = new Date(timestamp * 1000);
+  return `${date.toISOString().slice(8, 10)}/${date.toISOString().slice(5, 7)}`;
 };
 
 /**
@@ -17,5 +17,5 @@ export const formatTemperature = (temperature: number): `${string} °C` => {
  * Recebe valor numérico de precipitação e retorna string com mm
  */
 export const formatPrecipitation = (precipitation: number): `${string} mm` => {
-  return `${Math.round} mm`;
+  return `${Math.round(precipitation)} mm`;
 };

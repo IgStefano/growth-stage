@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import { init, getInstanceByDom } from "echarts";
-import type { CSSProperties } from "react";
+import type { CSSProperties, RefObject } from "react";
 import type { EChartsOption, ECharts, SetOptionOpts } from "echarts";
 
 export interface ReactEChartsProps {
@@ -9,6 +9,7 @@ export interface ReactEChartsProps {
   settings?: SetOptionOpts;
   loading?: boolean;
   theme?: "light" | "dark";
+  chartRef: RefObject<HTMLDivElement>;
 }
 
 export function ReactECharts({
@@ -17,9 +18,8 @@ export function ReactECharts({
   settings,
   loading,
   theme,
+  chartRef,
 }: ReactEChartsProps): JSX.Element {
-  const chartRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     let chart: ECharts | undefined;
     if (chartRef.current !== null) {
@@ -52,6 +52,6 @@ export function ReactECharts({
   }, [loading, theme]);
 
   return (
-    <div ref={chartRef} style={{ width: "100%", height: "100px", ...style }} />
+    <div ref={chartRef} style={{ width: "100%", height: "400px", ...style }} />
   );
 }

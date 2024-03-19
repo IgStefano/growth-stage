@@ -27,7 +27,7 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
       },
       formatter: function (params) {
         const tooltip: string[] = [];
-        params.forEach((param) => {
+        (params as any).forEach((param: any) => {
           let value = param.value;
           if (param.seriesName === "Accum Rainfall") {
             value = formatPrecipitation(param.value);

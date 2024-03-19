@@ -17,7 +17,32 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
   const ndviData = climateData.map((data) => data.ndvi);
 
   const option: ReactEChartsProps["option"] = {
-    title: { text: "Crescimento de indicadores ao longo do tempo" },
+    title: {
+      text: "Crescimento de indicadores ao longo do tempo",
+    },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+      formatter: function (params) {
+        const tooltip: string[] = [];
+        params.forEach((param) => {
+          let value = param.value;
+          switch (param.seriesName) {
+            case "Accum Rainfall":
+              value = formatPrecipitation(param.value);
+            case "Degree Day":
+              value = formatTemperature(param.value);
+          }
+          tooltip.push(`<strong>${param.seriesName}</strong>: ${value}`);
+        });
+        return tooltip.join("<br>").toString();
+      },
+    },
+    legend: {
+      orient: "horizontal",
+    },
     xAxis: [
       {
         data: timeData,
@@ -52,6 +77,8 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
         axisTick: {
           show: false,
         },
+        min: 0,
+        max: 50,
         axisLabel: {
           color: "#000",
           formatter: function (params: number) {
@@ -59,9 +86,23 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
           },
         },
       },
+      {
+        axisLine: {
+          show: false,
+        },
+        axisTick: {
+          show: false,
+        },
+        axisLabel: {
+          show: false,
+        },
+        min: 0,
+        max: 1,
+      },
     ],
     series: [
       {
+        name: "Accum Rainfall",
         type: "bar",
         showBackground: true,
         itemStyle: {
@@ -79,6 +120,7 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
         data: precipitationData,
       },
       {
+        name: "Degree Day",
         type: "line",
         color: "#ff8335",
         showSymbol: false,
@@ -88,26 +130,29 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
         yAxisIndex: 1,
       },
       {
+        name: "NVDI",
         type: "line",
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           {
             offset: 0,
-            color: "#e6f5eb",
+            color: "#70d798",
           },
           {
             offset: 1,
-            color: "#70d798",
+            color: "#e6f5ebFA",
           },
         ]),
         areaStyle: {
-          opacity: 0.7,
+          opacity: 0.6,
         },
         data: ndviData,
         showSymbol: false,
+        silent: true,
         smooth: true,
         lineStyle: {
           type: "dashed",
         },
+        yAxisIndex: 2,
       },
     ],
     dataZoom: [

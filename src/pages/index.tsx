@@ -29,12 +29,13 @@ export default function Home({ climateData }: { climateData: ClimateData[] }) {
         const tooltip: string[] = [];
         params.forEach((param) => {
           let value = param.value;
-          switch (param.seriesName) {
-            case "Accum Rainfall":
-              value = formatPrecipitation(param.value);
-            case "Degree Day":
-              value = formatTemperature(param.value);
+          if (param.seriesName === "Accum Rainfall") {
+            value = formatPrecipitation(param.value);
           }
+          if (param.seriesName === "Degree Day") {
+            value = formatTemperature(param.value);
+          }
+
           tooltip.push(`<strong>${param.seriesName}</strong>: ${value}`);
         });
         return tooltip.join("<br>").toString();
